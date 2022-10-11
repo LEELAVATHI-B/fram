@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+</head>
+<body>
+<form method="post">
+    {% csrf_token %}
+    <input id="id_username" name="username" type="text">
+    <input name="first_name" type="text">
+    <input name="last_name" type="text">
+    <input id="id_email" name="email" type="text">
+    <input name="phone" type="text">
+    <input name="address" type="text">
+    <input name="password" type="password">
+    <input name="password" type="password">
+    <button type="submit">submit</button>
+</form>
+<script>
+    $("#id_username").change(function () {
+        var username = $('#id_username').val();
+        $.ajax({
+            url: '/check_username/',
+            data: {
+                'username': username
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.username_exists) {
+                    alert("Username already taken");
+                }
+            }
+        });
+    });
+    $("#id_email").change(function () {
+        var email = $('#id_email').val();
+        $.ajax({
+            url: '/check_email/',
+            data: {
+                'email': email
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.email_exists) {
+                    alert("Email already taken");
+
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>

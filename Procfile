@@ -1,0 +1,1 @@
+web: gunicorn tesseract.wsgi
