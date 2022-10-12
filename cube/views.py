@@ -8,9 +8,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from .models import cubeUser
 
-# Create your views here.
 
-home_page = lambda request: render(request, 'cube/dashboard.html')
+# Create your views here.
 
 
 
@@ -22,8 +21,9 @@ def index(request):
 
 
 @login_required(login_url='/login')
-def profile(request, username):
-    return HttpResponse("userprofile")
+def profile(request):
+    curr_userobj = cubeUser.objects.get(user_name=request.user.username)
+    return render(request, 'cube/profile.html', {'curr_userobj': curr_userobj})
 
 
 @login_required(login_url='/login')
@@ -70,7 +70,6 @@ def user_logout(request):
     if request.user.is_authenticated:
         logout(request)
     return redirect('/login')
-
 
 
 def check_username(request):
