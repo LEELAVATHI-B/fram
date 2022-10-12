@@ -3,13 +3,16 @@ from django.http import JsonResponse
 from rest_framework import serializers
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from .models import cubeUser
 
 # Create your views here.
 
-home_page = lambda request: render(request, 'cube/index.html')
+home_page = lambda request: render(request, 'cube/dashboard.html')
+
+base_page = lambda request: render(request, 'cube/base.html')
 
 
 def index(request):
@@ -19,16 +22,20 @@ def index(request):
         return redirect('/login')
 
 
+@login_required(login_url='/login')
 def profile(request, username):
     return HttpResponse("userprofile")
 
 
+@login_required(login_url='/login')
 def dashboard(request):
     return render(request, 'cube/dashboard.html')
 
 
 def user_login(request):
-    if request.method == 'POST':
+    if request.user.is_authenticated:
+        return redirect('/dashboard')
+    elif request.method == 'POST':
         username = request.POST.get('user_name')
         password = request.POST.get('password')
         print(username, password)

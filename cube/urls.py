@@ -17,7 +17,8 @@ urlpatterns = [
     path('signup/', views.user_signup, name='signup'),
     path('logout/', views.user_logout, name='logout'),
     path('dashboard/', views.dashboard, name='dashboard'),
-    path('check_username/',views.check_username,name='checkusername'),
-    path('check_email/',views.check_email,name='checkemail'),
-    path('home/',views.home_page,name='home'),
+    path('check_username/', views.check_username, name='checkusername'),
+    path('check_email/', views.check_email, name='checkemail'),
+    path('home/', views.home_page, name='home'),
+    path('base/', views.base_page, name='base'),
 ]
