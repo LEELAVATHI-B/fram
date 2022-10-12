@@ -12,7 +12,6 @@ from .models import cubeUser
 
 home_page = lambda request: render(request, 'cube/dashboard.html')
 
-base_page = lambda request: render(request, 'cube/base.html')
 
 
 def index(request):

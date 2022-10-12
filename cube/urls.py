@@ -20,5 +20,4 @@ urlpatterns = [
     path('check_username/', views.check_username, name='checkusername'),
     path('check_email/', views.check_email, name='checkemail'),
     path('home/', views.home_page, name='home'),
-    path('base/', views.base_page, name='base'),
 ]
