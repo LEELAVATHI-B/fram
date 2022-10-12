@@ -31,10 +31,11 @@ def user_login(request):
     if request.method == 'POST':
         username = request.POST.get('user_name')
         password = request.POST.get('password')
+        print(username, password)
         curr_user = authenticate(request, username=username, password=password)
-        if request.user.is_authenticated:
+        if curr_user is not None:
             login(request, curr_user)
-            return HttpResponse('Login Successful')
+            return redirect('/dashboard')
         else:
             return HttpResponse('Login Failed')
     return render(request, 'cube/login.html')
@@ -62,8 +63,8 @@ def user_signup(request):
 def user_logout(request):
     if request.user.is_authenticated:
         logout(request)
-        return HttpResponse('logout successful')
-    return user_login(request)
+    return redirect('/login')
+
 
 
 def check_username(request):

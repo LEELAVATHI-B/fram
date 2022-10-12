@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class cubeUser(models.Model):
+    profile_pic = models.ImageField(upload_to='profile_pics', blank=True)
     user_name = models.CharField(max_length=30, unique=True)
     first_name = models.CharField(max_length=25)
     last_name = models.CharField(max_length=25)
