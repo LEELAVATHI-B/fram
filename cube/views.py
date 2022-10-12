@@ -7,8 +7,11 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from .models import cubeUser
 
-
 # Create your views here.
+
+home_page = lambda request: render(request, 'cube/index.html')
+
+
 def index(request):
     if request.user.is_authenticated:
         return redirect('/dashboard')
