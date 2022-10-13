@@ -48,6 +48,8 @@ def user_login(request):
 
 
 def user_signup(request):
+    if request.user.is_authenticated:
+        return redirect('/dashboard')
     if request.method == 'POST':
         user_name = request.POST.get('username')
         first_name = request.POST.get('first_name')
