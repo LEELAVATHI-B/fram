@@ -7,10 +7,10 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from .models import cubeUser
+from django.views.generic import CreateView
 
 
 # Create your views here.
-
 
 
 def index(request):
@@ -63,8 +63,7 @@ def user_signup(request):
         authUser = User.objects.create_user(user_name, email, password)
         authUser.save()
         currUser.save()
-        print("user created successfully")
-        return HttpResponse('user created successfully')
+        return redirect('/login')
     return render(request, 'cube/signup.html')
 
 
