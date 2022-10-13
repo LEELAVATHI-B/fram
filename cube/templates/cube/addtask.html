@@ -1,0 +1,35 @@
+{% extends 'cube/base.html' %}
+{% load static %}
+{% block content %}
+    <h1 class="text-center"> New Note</h1>
+    <div class="container text-center align-content-center">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                {{ form.title }}
+            </div>
+            <div class="container align-content-center">
+                {{ form.content }}
+                </div>
+            <div class="form-group">
+                <button class="btn" type="submit">Post</button>
+            </div>
+        </form>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
+            integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        $(document).ready(function () {
+            var title = document.getElementById("id_title");
+            title.classList.add("form-control");
+            title.placeholder = "Title";
+            title.type = "text";
+            var iframe = document.getElementById("id_content_iframe");
+            //console.log(iframe.contentWindow.document.head.title);
+        });
+        var iframe = document.getElementById("id_content_iframe");
+        iframe.style.width = "100%"
+        console.log(iframe.contentWindow.document.getElementById("summernote"),"pl");
+    </script>
+{% endblock %}

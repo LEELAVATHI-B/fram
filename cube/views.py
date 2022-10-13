@@ -6,8 +6,11 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
-from .models import cubeUser
+from .models import cubeUser, Note
 from django.views.generic import CreateView
+from django_summernote.widgets import SummernoteInplaceWidget
+from .forms import Noteform
+import datetime
 
 
 # Create your views here.
@@ -87,3 +90,18 @@ def check_email(request):
         'email_exists': User.objects.filter(email__iexact=email).exists()
     }
     return JsonResponse(data)
+
+
+def NoteView(request):
+    if request.method == 'POST':
+        form = Noteform(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data['title']
+            content = form.cleaned_data['content']
+            print(title, content)
+            currNote = Note(user=request.user,title=title,content=content,date_created=datetime.datetime.now())
+            currNote.save()
+            return redirect('/dashboard')
+    else:
+        form = Noteform()
+    return render(request, 'cube/addtask.html', {'form': form})

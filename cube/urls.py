@@ -18,4 +18,5 @@ urlpatterns = [
     path('check_username/', views.check_username, name='checkusername'),
     path('check_email/', views.check_email, name='checkemail'),
     path('profile/',views.profile, name='profile'),
+    path('add_note/', views.NoteView, name='add_note'),
 ]
