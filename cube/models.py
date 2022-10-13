@@ -15,7 +15,9 @@ class cubeUser(models.Model):
     def __str__(self):
         return self.user_name
 
-class Note:
+
+class Note(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     content = models.TextField()
+    date_created = models.DateTimeField(auto_now_add=True)
