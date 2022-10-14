@@ -1,7 +1,16 @@
-# Tesseract
+<div align = "center">
+<img src="https://github.com/RMKCET-AI/tesseract/blob/master/cube/static/cube/icons/tesseract_logo.ico" alt="Tesseract" width="25" height="30"<h1 align="center" font-family="courier"> <b><font>Tesseract</font></b></h1>
+
+ <br>
+ <br>
+
+
 [![Sonar Cloud](https://github.com/RMKCET-AI/tesseract/actions/workflows/build.yml/badge.svg)](https://github.com/RMKCET-AI/tesseract/actions/workflows/build.yml/badge.svg)
+[![Azure](https://github.com/RMKCET-AI/tesseract/actions/workflows/master_tesseract7.yml/badge.svg)](https://github.com/RMKCET-AI/tesseract/blob/master/.github/workflows/master_tesseract7.yml)
 <br/>
-Tesseract is a web-app refering the task given by iamneo 
+<br>
+Tesseract is a web-app referring the task given by iamneo 
+</div>
 
 ---
 
@@ -22,13 +31,13 @@ The portal is a web application; to set it up, we require a python environment w
     - For linux/macintosh:
     ```bash
         $ python3 -m venv venv
-        $ source bin/activate
+        $ source venv/bin/activate
         $ pip3 install -r requirements.txt
     ```   
     - For windows:
     ```bash
         python -m venv venv
-        venv\Scripts\activate.bat
+        venv/Scripts/activate.bat
         pip install -r requirements.txt
     ```
 ## Docker setup
