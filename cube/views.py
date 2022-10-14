@@ -99,7 +99,7 @@ def NoteView(request):
             title = form.cleaned_data['title']
             content = form.cleaned_data['content']
             print(title, content)
-            currNote = Note(user=request.user,title=title,content=content,date_created=datetime.datetime.now())
+            currNote = Note(user=request.user, title=title, content=content, date_created=datetime.datetime.now())
             currNote.save()
             return redirect('/dashboard')
     else:
