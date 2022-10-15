@@ -20,6 +20,7 @@ class Note(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     content = models.TextField()
+    tags = models.TextField(blank=True, null=True, default=None)
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

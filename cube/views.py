@@ -123,8 +123,9 @@ def NoteView(request):
         if form.is_valid():
             title = form.cleaned_data['title']
             content = form.cleaned_data['content']
-            print(title, content)
-            currNote = Note(user=request.user, title=title, content=content, date_created=datetime.datetime.now())
+            tags = request.POST.get('tags')
+            currNote = Note(user=request.user, title=title, content=content, tags=tags,
+                            date_created=datetime.datetime.now())
             currNote.save()
             return redirect('/dashboard')
     else:
@@ -180,4 +181,3 @@ class UserCrudView(APIView):
                 'message': 'User deleted successfully'
             })
         return JsonResponse({'error': 'Invalid API Key'}, status=400)
-

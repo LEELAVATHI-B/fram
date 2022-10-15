@@ -110,7 +110,8 @@
                         {% endif %}
                         <!-- Profile picture help block-->
 
-                        <div class="small font-italic text-muted mb-4" style="font-size: larger"><b>{{ request.user.username }}</b></div>
+                        <div class="small font-italic text-muted mb-4" style="font-size: larger">
+                            <b>{{ request.user.username }}</b></div>
                         <!-- Profile picture upload button-->
                         <form method="post" enctype="multipart/form-data" id="profile_pic">
                             {% csrf_token %}
@@ -220,10 +221,10 @@
                 },
                 type: 'post',
                 success: function (data) {
-                    window.alert("Account Deleted");
+
                 },
                 error: function (error) {
-                    console.log(error);
+
                 }
             });
         }

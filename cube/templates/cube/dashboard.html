@@ -300,28 +300,28 @@
                 <div class="col">
                     <div id="order-left" class="dragcols" color="danger">
                         {% for note in curr_notes %}
+
                             <div class="col my-2">
                                 <div class="card">
                                     <div class="card-body">
                                         <h5 class="card-title text-center"><b>{{ note.title }}</b></h5>
                                         <hr>
                                         <div style="width: 100%;display: flex;justify-content: space-between;">
-                                            <div>
-                                                <b>Tags-</b>
-                                                <button type="button" class="btn btn-warning">tag1</button>
-                                                <button type="button" class="btn btn-secondary">tag2</button>
-                                                <button type="button" class="btn btn-success">tag3</button>
-                                                <button type="button" class="btn btn-danger">tag4</button>
-                                            </div>
+                                            <div class="row">
+                                                <div class="col text-center mt-1">
+                                                    Tags:
+                                                </div>
+                                                <div id="button_holder">
 
+                                                </div>
+                                                <p id="all_tags">{{ note.tags }}</p>
+                                            </div>
                                             <div>
-                                                <a type="button" class="btn btn-primary position-relative"
+                                                <a type="button" class="btn btn-primary "
                                                    href="{% url 'view_note' note_id=note.pk %}">
                                                     view task
-                                                    {#                                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">99+</span>#}
                                                 </a>
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
@@ -335,13 +335,28 @@
         <!-- Page level plugins -->
         <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
         <script>
-            var elements = document.getElementsByClassName("dragcols");
-            for (var i = 0; i < elements.length; i++) {
-                new Sortable(elements[i], {
-                    animation: 150,
-                    ghostClass: elements[i].color,
-                });
+            /*$(document).onload(function () {
+                var elements = document.getElementsByClassName("dragcols");
+                for (var i = 0; i < elements.length; i++) {
+                    new Sortable(elements[i], {
+                        animation: 150,
+                        ghostClass: elements[i].color,
+                    });
+                }
+            });*/
+            //$(document).onload(function () {
+            var tags = document.getElementById("all_tags");
+            var tag = tags.innerText.split(",");
+            for (var i = 0; i < tag.length; i++) {
+                var btn = document.createElement("button");
+                var button_holder = document.getElementById("button_holder");
+                btn.innerHTML = tag[i];
+                btn.className = "badge bg-primary mx-1 my-1";
+                button_holder.appendChild(btn);
             }
+            tags.remove();
+            //}
+            //});
         </script>
 
     </div>
