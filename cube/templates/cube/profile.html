@@ -99,32 +99,53 @@
                     <div class="card-header">Profile Picture</div>
                     <div class="card-body text-center">
                         <!-- Profile picture image-->
-                        <img class="img-account-profile rounded-circle mb-2"
-                             src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Anonymous_emblem.svg/640px-Anonymous_emblem.svg.png"
-                             alt="">
+                        {% if curr_userobj.profile_pic %}
+                            <img class="img-account-profile rounded-circle mb-2"
+                                 src="{{ curr_userobj.profile_pic.url }}"
+                                 alt="Profile Picture"/>
+                        {% else %}
+                            <img class="img-account-profile rounded-circle mb-2"
+                                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Anonymous_emblem.svg/640px-Anonymous_emblem.svg.png"
+                                 alt="">
+                        {% endif %}
                         <!-- Profile picture help block-->
                         <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
                         <!-- Profile picture upload button-->
-                        <form action="/upload" method="post" enctype="multipart/form-data">
+                        <form method="post" enctype="multipart/form-data" id="profile_pic">
+                            {% csrf_token %}
+
                             <div class="file btn btn-lg btn-primary" id="file_upload" type="submit">
-                                Upload new image
-                                <input type="file" id="image_upload">
+
+                                <input type="file" id="image_upload" name="profile_photo">
+                                Upload
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
+                    integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=="
+                    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+            <script>
+                $("#file_upload").change(function () {
+                    var form = document.getElementById('profile_pic');
+                    console.log("ok");
+                    console.log(form);
+                    form.submit();
+                });
+            </script>
             <div class="col-xl-8">
                 <!-- Account details card-->
                 <div class="card mb-4">
                     <div class="card-header">Account Details</div>
                     <div class="card-body">
-                        <form>
+                        <form method="post">
                             {% csrf_token %}
                             <!-- Form Group (username)-->
                             <div class="mb-3">
                                 <label class="small mb-1" for="inputUsername">Username</label>
-                                <input class="form-control" id="inputUsername" type="text"
+                                <input name="username" class="form-control" id="inputUsername" type="text"
                                        placeholder="Enter your username" value="{{ curr_userobj.user_name }}">
                             </div>
                             <!-- Form Row-->
@@ -132,35 +153,19 @@
                                 <!-- Form Group (first name)-->
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputFirstName">First name</label>
-                                    <input class="form-control" id="inputFirstName" type="text"
+                                    <input name="first_name" class="form-control" id="inputFirstName" type="text"
                                            placeholder="Enter your first name" value="{{ curr_userobj.first_name }}">
                                 </div>
                                 <!-- Form Group (last name)-->
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputLastName">Last name</label>
-                                    <input class="form-control" id="inputLastName" type="text"
+                                    <input name="last_name" class="form-control" id="inputLastName" type="text"
                                            placeholder="Enter your last name" value="{{ curr_userobj.last_name }}">
                                 </div>
                             </div>
-                            <!-- Form Row        -->
-                            {#                            <div class="row gx-3 mb-3">#}
-                            <!-- Form Group (organization name)-->
-                            {#                                <div class="col-md-6">#}
-                            {#                                    <label class="small mb-1" for="inputOrgName">Organization name</label>#}
-                            {#                                    <input class="form-control" id="inputOrgName" type="text"#}
-                            {#                                           placeholder="Enter your organization name" value="Start Bootstrap">#}
-                            {#                                </div>#}
-                            {#                                <!-- Form Group (location)-->#}
-                            {#                                <div class="col-md-6">#}
-                            {#                                    <label class="small mb-1" for="inputLocation">Location</label>#}
-                            {#                                    <input class="form-control" id="inputLocation" type="text"#}
-                            {#                                           placeholder="Enter your location" value="San Francisco, CA">#}
-                            {#                                </div>#}
-                            {#                            </div>#}
-                            <!-- Form Group (email address)-->
                             <div class="mb-3">
                                 <label class="small mb-1" for="inputEmailAddress">Email address</label>
-                                <input class="form-control" id="inputEmailAddress" type="email"
+                                <input name="email" class="form-control" id="inputEmailAddress" type="email"
                                        placeholder="Enter your email address" value="{{ curr_userobj.email }}">
                             </div>
                             <!-- Form Row-->
@@ -168,7 +173,7 @@
                                 <!-- Form Group (phone number)-->
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputPhone">Phone number</label>
-                                    <input class="form-control" id="inputPhone" type="tel"
+                                    <input name="phone" class="form-control" id="inputPhone" type="tel"
                                            placeholder="Enter your phone number"
                                            value="{{ curr_userobj.contact_number }}">
                                 </div>
@@ -176,15 +181,57 @@
                             </div>
                             <div class="mb-3">
                                 <label class="small mb-1" for="inputUsername">Address</label>
-                                <textarea class="form-control" id="inputUsername" type="text-area"
+                                <textarea name="address" class="form-control" id="inputUsername" type="text-area"
                                           placeholder="Enter your username">{{ curr_userobj.address }}</textarea>
                             </div>
                             <!-- Save changes button-->
-                            <button class="btn btn-primary" type="button">Save changes</button>
+                            <button class="btn btn-primary" type="submit">Save changes</button>
+                            <a class="btn btn-danger" type="button" data-toggle="modal" data-target="#dlt">Delete
+                                Account</a>
                         </form>
+                        <div class="modal fade" id="dlt" tabindex="-1" role="dialog"
+                             aria-labelledby="exampleModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">Select "Delete" below if you are want to delete your account
+                                        this is irreversible.
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel
+                                        </button>
+                                        <button class="btn btn-danger" onclick="deleteAccount()">Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        function deleteAccount() {
+            var post_data = {
+                'csrfmiddlewaretoken': "{{ csrf_token }}"
+            }
+            $.ajax({
+                url: '',
+                type: 'POST',
+                data: post_data,
+                success: function (data) {
+                    console.log(data);
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+    </script>
 {% endblock %}

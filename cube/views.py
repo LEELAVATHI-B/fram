@@ -9,8 +9,11 @@ from django.utils.decorators import method_decorator
 from .models import cubeUser, Note
 from django.views.generic import CreateView
 from django_summernote.widgets import SummernoteInplaceWidget
-from .forms import Noteform
+from .forms import Noteform, ProfilePicUpdate
+from django.core.files import File
 import datetime
+from django.views.decorators.http import require_http_methods
+from PIL import Image
 
 
 # Create your views here.
@@ -25,8 +28,21 @@ def index(request):
 
 @login_required(login_url='/login')
 def profile(request):
+    if request.method == 'POST':
+        curr_user = cubeUser.objects.get(user_name=request.user)
+        if request.FILES.get('profile_photo'):
+            img = request.FILES.get('profile_photo')
+            curr_user.profile_pic.save(img.name, File(img))
+            return redirect('/profile')
+        else:
+            cubeUser.objects.filter(user_name=request.user).update(first_name=request.POST.get('first_name'),
+                                                                   last_name=request.POST.get('last_name'),
+                                                                   contact_number=request.POST.get('phone'),
+                                                                   email=request.POST.get('email'),
+                                                                   address=request.POST.get('address'))
+            return redirect('/profile')
     curr_userobj = cubeUser.objects.get(user_name=request.user.username)
-    return render(request, 'cube/profile.html', {'curr_userobj': curr_userobj})
+    return render(request, 'cube/profile.html', {'curr_userobj': curr_userobj, 'pic_form': ProfilePicUpdate})
 
 
 @login_required(login_url='/login')
