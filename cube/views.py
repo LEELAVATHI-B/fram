@@ -140,8 +140,6 @@ def view_task(request, note_id):
 
 class UserCrudView(APIView):
     def get(self, request):
-        print(request.GET.get('apikey'), "ok")
-        print(APIkey.objects.filter(key=request.GET.get('apikey')))
         if APIkey.objects.filter(key=request.GET.get('apikey')).exists():
             users = cubeUser.objects.all()
             serializer = cubeUserSerializer(users, many=True)
@@ -178,6 +176,8 @@ class UserCrudView(APIView):
             auth_user = User.objects.get(username=user.user_name)
             auth_user.delete()
             user.delete()
-            return render(request, 'cube/login.html')
+            return JsonResponse({
+                'message': 'User deleted successfully'
+            })
         return JsonResponse({'error': 'Invalid API Key'}, status=400)
 
