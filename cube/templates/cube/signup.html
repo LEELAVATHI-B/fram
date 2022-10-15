@@ -13,46 +13,49 @@
                         <div class="p-5">
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
+                                <h2 class="h5 mb-4" style="display: none ; color: red;" id="nameMessage">(Username already exits)</h2>
+                                <h2 class="h5 mb-4" style="display: none ; color: red ;" id="emailMessage">(Email already exits)</h2>
+                                <h2 class="h5 mb-4" style="display: none ; color: red ;" id="passwordMessage">(Password Must be Match)</h2>
                             </div>
                             <form class="user" method="post">
                                 {% csrf_token %}
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                         <input type="text" class="form-control form-control-user" id="firstname"
-                                               placeholder="First Name" name="first_name">
+                                               placeholder="First Name" name="first_name" required>
                                     </div>
                                     <div class="col-sm-6">
                                         <input type="text" class="form-control form-control-user" id="exampleLastName"
-                                               placeholder="Last Name" name="last_name">
+                                               placeholder="Last Name" name="last_name" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <input type="text" name="username" class="form-control form-control-user" id="id_username"
-                                           placeholder="Username">
+                                           placeholder="Username"  required>
                                 </div>
                                 <div class="form-group">
                                     <input type="email" class="form-control form-control-user" id="id_email"
-                                           placeholder="Email address" name="email">
+                                           placeholder="Email address" name="email"  required>
                                 </div>
                                 <div class="form-group">
                                     <input type="text" class="form-control form-control-user" id="exampleInputMobile"
-                                           placeholder="Mobile No." maxlength="14" name="phone">
+                                           placeholder="Mobile No." maxlength="14" name="phone" required>
                                 </div>
                                 <div class="form-group">
                                     <textarea rows="3" name="address" id="user-message" class="form-control"
-                                              placeholder="Address"></textarea>
+                                              placeholder="Address" required></textarea>
                                 </div><!--ends from group-->
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                         <input name="password" type="password" class="form-control form-control-user"
-                                               id="exampleInputPassword" placeholder="Password">
+                                               id="exampleInputPassword" placeholder="Password" required>
                                     </div>
                                     <div class="col-sm-6">
                                         <input name="password" type="password" class="form-control form-control-user"
-                                               id="exampleRepeatPassword" placeholder="Repeat Password">
+                                               id="exampleRepeatPassword" placeholder="Repeat Password" onkeyup="validatePassword()" required>
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary btn-user btn-block">
+                                <button type="submit" class="btn btn-primary btn-user btn-block"  id="submitbutton">
                                     Register Account
                                 </button>
 
@@ -76,7 +79,10 @@
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
+
         $("#id_username").change(function () {
+            var message = document.getElementById("nameMessage");
+            var user = document.getElementById("id_username");
             var username = $('#id_username').val();
             $.ajax({
                 url: '/check_username/',
@@ -86,12 +92,23 @@
                 dataType: 'json',
                 success: function (data) {
                     if (data.username_exists) {
-                        alert("Username already taken");
+                        user.style.backgroundColor = "tomato";
+                        user.style.color = "white";
+                        message.style.display = "block";
+                        document.getElementById("submitbutton").disabled = true;
+                    }
+                    else{
+                        user.style.backgroundColor = "";
+                        user.style.color = "";
+                        message.style.display = "none";
+                        document.getElementById("submitbutton").disabled = false;
                     }
                 }
             });
         });
         $("#id_email").change(function () {
+            var meggage = document.getElementById("emailMessage");
+            var emailid = document.getElementById("id_email");
             var email = $('#id_email').val();
             $.ajax({
                 url: '/check_email/',
@@ -101,11 +118,38 @@
                 dataType: 'json',
                 success: function (data) {
                     if (data.email_exists) {
-                        alert("Email already taken");
-
+                        emailid.style.backgroundColor = "tomato";
+                        emailid.style.color = "white";
+                        meggage.style.display = "block";
+                        document.getElementById("submitbutton").disabled = true;
+                    } else {
+                        emailid.style.backgroundColor = "";
+                        emailid.style.color = "";
+                        meggage.style.display = "none";
+                        document.getElementById("submitbutton").disabled = false;
                     }
                 }
             });
         });
+        function validatePassword() {
+            var pass = document.getElementById("exampleRepeatPassword");
+            var password = document.getElementById("exampleInputPassword").value;
+            var confirmPassword = document.getElementById("exampleRepeatPassword").value;
+            var message = document.getElementById("passwordMessage");
+            if (password != confirmPassword) {
+                pass.style.backgroundColor = "tomato";
+                pass.style.color = "white";
+                message.style.display= "";
+                document.getElementById("submitbutton").disabled = true;
+            } else {
+                pass.style.backgroundColor = "";
+                pass.style.color = "";
+                message.style.display= "none";
+                document.getElementById("submitbutton").disabled = false;
+            }
+        }
+
+
+
     </script>
 {% endblock %}
