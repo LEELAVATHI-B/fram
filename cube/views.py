@@ -31,7 +31,8 @@ def profile(request):
 
 @login_required(login_url='/login')
 def dashboard(request):
-    return render(request, 'cube/dashboard.html')
+    curr_notes = Note.objects.all().filter(user=request.user)
+    return render(request, 'cube/dashboard.html', {'curr_notes': curr_notes})
 
 
 def user_login(request):
@@ -42,7 +43,9 @@ def user_login(request):
         password = request.POST.get('password')
         print(username, password)
         curr_user = authenticate(request, username=username, password=password)
-        if curr_user is not None:
+        if curr_user.is_superuser:
+            return redirect('/admin')
+        elif curr_user is not None:
             login(request, curr_user)
             return redirect('/dashboard')
         else:
@@ -92,6 +95,7 @@ def check_email(request):
     return JsonResponse(data)
 
 
+@login_required(login_url='/login')
 def NoteView(request):
     if request.method == 'POST':
         form = Noteform(request.POST)
@@ -105,3 +109,9 @@ def NoteView(request):
     else:
         form = Noteform()
     return render(request, 'cube/addtask.html', {'form': form})
+
+
+@login_required(login_url='/login')
+def view_task(request, note_id):
+    note = Note.objects.get(id=note_id)
+    return render(request, 'cube/view_task.html', {'note': note})

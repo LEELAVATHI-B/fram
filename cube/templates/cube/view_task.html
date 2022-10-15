@@ -1,0 +1,16 @@
+{% extends 'cube/base.html' %}
+{% block content %}
+    <body>
+        <h2>{{ note.title }}</h2>
+        <div class="container" style='all: revert !important;'>
+            {{ note.content|safe }}
+        </div>
+        <iframe id="framee">
+
+        </iframe>
+    </body>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script>
+        $('#iframe').contents().find('html').html({{ note.content|safe }});
+    </script>
+{% endblock %}
