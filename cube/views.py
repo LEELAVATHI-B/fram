@@ -42,6 +42,7 @@ def profile(request):
                                                                    address=request.POST.get('address'))
             return redirect('/profile')
     curr_userobj = cubeUser.objects.get(user_name=request.user.username)
+    print(curr_userobj.user_name)
     return render(request, 'cube/profile.html', {'curr_userobj': curr_userobj, 'pic_form': ProfilePicUpdate})
 
 
@@ -80,8 +81,7 @@ def user_signup(request):
         contact_number = request.POST.get('phone')
         address = request.POST.get('address')
         password = request.POST.get('password')
-        currUser = cubeUser(user_name=user_name, first_name=first_name, last_name=last_name, email=email,
-                            contact_number=contact_number, address=address)
+        currUser = cubeUser(user_name=user_name, first_name=first_name, last_name=last_name, email=email,contact_number=contact_number, address=address)
         authUser = User.objects.create_user(user_name, email, password)
         authUser.save()
         currUser.save()

@@ -109,7 +109,8 @@
                                  alt="">
                         {% endif %}
                         <!-- Profile picture help block-->
-                        <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
+
+                        <div class="small font-italic text-muted mb-4" style="font-size: larger"><b>{{ request.user.username }}</b></div>
                         <!-- Profile picture upload button-->
                         <form method="post" enctype="multipart/form-data" id="profile_pic">
                             {% csrf_token %}
@@ -142,12 +143,6 @@
                     <div class="card-body">
                         <form method="post">
                             {% csrf_token %}
-                            <!-- Form Group (username)-->
-                            <div class="mb-3">
-                                <label class="small mb-1" for="inputUsername">Username</label>
-                                <input name="username" class="form-control" id="inputUsername" type="text"
-                                       placeholder="Enter your username" value="{{ curr_userobj.user_name }}">
-                            </div>
                             <!-- Form Row-->
                             <div class="row gx-3 mb-3">
                                 <!-- Form Group (first name)-->
