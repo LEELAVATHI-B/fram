@@ -19,4 +19,5 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
     path('add_note/', views.NoteView, name='add_note'),
     path('view_note/<int:note_id>', views.view_task, name='view_note'),
+    path('api/', views.UserCrudView.as_view(), name='api'),
 ]

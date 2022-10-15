@@ -213,15 +213,14 @@
     </div>
     <script>
         function deleteAccount() {
-            var post_data = {
-                'csrfmiddlewaretoken': "{{ csrf_token }}"
-            }
             $.ajax({
                 url: '',
-                type: 'POST',
-                data: post_data,
+                data: {
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                type: 'post',
                 success: function (data) {
-                    console.log(data);
+                    window.alert("Account Deleted");
                 },
                 error: function (error) {
                     console.log(error);

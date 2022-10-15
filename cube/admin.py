@@ -1,10 +1,9 @@
 from django.contrib import admin
 from django.contrib.auth.admin import Group
 from django_summernote.admin import SummernoteModelAdmin
-from .models import Note
+from .models import Note, cubeUser, APIkey
 
 # Register your models here.
-from .models import cubeUser
 
 
 class PostAdmin(SummernoteModelAdmin):
@@ -14,3 +13,4 @@ class PostAdmin(SummernoteModelAdmin):
 admin.site.register(cubeUser)
 admin.site.unregister(Group)
 admin.site.register(Note, PostAdmin)
+admin.site.register(APIkey)

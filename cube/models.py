@@ -24,3 +24,13 @@ class Note(models.Model):
 
     def __str__(self):
         return f'{self.user}-{self.title}'
+
+
+class APIkey(models.Model):
+    name = models.CharField(max_length=100)
+    key = models.TextField()
+
+    def __str__(self):
+        return self.name
+    class Meta:
+        verbose_name_plural = 'APIkeys'

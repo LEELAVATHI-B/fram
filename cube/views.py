@@ -1,19 +1,16 @@
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect, redirect
 from django.http import JsonResponse
-from rest_framework import serializers
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
-from .models import cubeUser, Note
-from django.views.generic import CreateView
+from .models import cubeUser, Note, APIkey
+from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, DestroyAPIView, UpdateAPIView
+from rest_framework.views import APIView
+from .serializers import cubeUserSerializer
 from django_summernote.widgets import SummernoteInplaceWidget
 from .forms import Noteform, ProfilePicUpdate
 from django.core.files import File
 import datetime
-from django.views.decorators.http import require_http_methods
-from PIL import Image
 
 
 # Create your views here.
@@ -34,22 +31,29 @@ def profile(request):
             img = request.FILES.get('profile_photo')
             curr_user.profile_pic.save(img.name, File(img))
             return redirect('/profile')
-        else:
+        elif request.POST.get('first_name'):
             cubeUser.objects.filter(user_name=request.user).update(first_name=request.POST.get('first_name'),
                                                                    last_name=request.POST.get('last_name'),
                                                                    contact_number=request.POST.get('phone'),
                                                                    email=request.POST.get('email'),
                                                                    address=request.POST.get('address'))
             return redirect('/profile')
+        else:
+            auth_user = User.objects.get(username=request.user)
+            cube_user = cubeUser.objects.get(user_name=request.user)
+            auth_user.delete()
+            cube_user.delete()
+            return redirect('/login')
     curr_userobj = cubeUser.objects.get(user_name=request.user.username)
-    print(curr_userobj.user_name)
     return render(request, 'cube/profile.html', {'curr_userobj': curr_userobj, 'pic_form': ProfilePicUpdate})
 
 
 @login_required(login_url='/login')
 def dashboard(request):
-    curr_notes = Note.objects.all().filter(user=request.user)
-    return render(request, 'cube/dashboard.html', {'curr_notes': curr_notes})
+    if not request.user.is_superuser:
+        curr_notes = Note.objects.all().filter(user=request.user)
+        return render(request, 'cube/dashboard.html', {'curr_notes': curr_notes})
+    return redirect('/admin')
 
 
 def user_login(request):
@@ -60,13 +64,13 @@ def user_login(request):
         password = request.POST.get('password')
         print(username, password)
         curr_user = authenticate(request, username=username, password=password)
-        if curr_user.is_superuser:
+        if not curr_user:
+            return HttpResponse('Invalid Credentials')
+        elif curr_user.is_superuser:
             return redirect('/admin')
-        elif curr_user is not None:
+        else:
             login(request, curr_user)
             return redirect('/dashboard')
-        else:
-            return HttpResponse('Login Failed')
     return render(request, 'cube/login.html')
 
 
@@ -81,7 +85,8 @@ def user_signup(request):
         contact_number = request.POST.get('phone')
         address = request.POST.get('address')
         password = request.POST.get('password')
-        currUser = cubeUser(user_name=user_name, first_name=first_name, last_name=last_name, email=email,contact_number=contact_number, address=address)
+        currUser = cubeUser(user_name=user_name, first_name=first_name, last_name=last_name, email=email,
+                            contact_number=contact_number, address=address)
         authUser = User.objects.create_user(user_name, email, password)
         authUser.save()
         currUser.save()
@@ -131,3 +136,48 @@ def NoteView(request):
 def view_task(request, note_id):
     note = Note.objects.get(id=note_id)
     return render(request, 'cube/view_task.html', {'note': note})
+
+
+class UserCrudView(APIView):
+    def get(self, request):
+        print(request.GET.get('apikey'), "ok")
+        print(APIkey.objects.filter(key=request.GET.get('apikey')))
+        if APIkey.objects.filter(key=request.GET.get('apikey')).exists():
+            users = cubeUser.objects.all()
+            serializer = cubeUserSerializer(users, many=True)
+            return JsonResponse(serializer.data, safe=False)
+        return JsonResponse({'error': 'Invalid API Key'}, status=400)
+
+    def post(self, request):
+        if APIkey.objects.filter(key=request.GET.get('apikey')).exists():
+            serializer = cubeUserSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                User.objects.create_user(request.data['user_name'], request.data['email'], request.data['password'])
+                return JsonResponse(serializer.data, status=201)
+            password_req = {'password': ['This field is required.']}
+            required_fields = {**serializer.errors, **password_req}
+            return JsonResponse(required_fields, status=400)
+        return JsonResponse({'error': 'Invalid API Key'}, status=400)
+
+    def put(self, request):
+        if APIkey.objects.filter(key=request.GET.get('apikey')).exists():
+            pk = request.GET.get('pk')
+            user = cubeUser.objects.get(pk=pk)
+            serializer = cubeUserSerializer(user, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return JsonResponse(serializer.data, status=201)
+            return JsonResponse(serializer.errors, status=400)
+        return JsonResponse({'error': 'Invalid API Key'}, status=400)
+
+    def delete(self, request):
+        if APIkey.objects.filter(key=request.GET.get('apikey')).exists():
+            pk = request.GET.get('pk')
+            user = cubeUser.objects.get(pk=pk)
+            auth_user = User.objects.get(username=user.user_name)
+            auth_user.delete()
+            user.delete()
+            return render(request, 'cube/login.html')
+        return JsonResponse({'error': 'Invalid API Key'}, status=400)
+
