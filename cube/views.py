@@ -196,10 +196,7 @@ class UserCrudView(APIView):
 def search_result(request, search_query):
     notes = Note.objects.filter(user=request.user, title__icontains=search_query)
     print(search_query)
-    if notes:
-        return render(request, 'cube/search_results.html', {'notes': notes})
-    else:
-        return HttpResponse("OOps! No results found")
+    return render(request, 'cube/search_results.html', {'curr_notes': notes})
 
 
 def delete_note(request, note_id):

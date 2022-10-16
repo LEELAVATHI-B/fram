@@ -1,0 +1,92 @@
+{% extends 'cube/base.html' %}
+{% block content %}
+    {% if curr_notes %}
+        <h4 style="text-align: center; color: #1e347b; font-family: 'Comic Sans MS';font-size: xx-large"><b>Search results</b></h4>
+                <div class="col">
+                    <div class="col">
+                        <div id="order-left" class="dragcols" color="danger">
+                            {% for note in curr_notes %}
+                                <div class="col my-2">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title text-center"><b>{{ note.title }}</b></h5>
+                                            <hr>
+                                            <div style="width: 100%;display: flex;justify-content: space-between;">
+                                                <div class="row">
+                                                    <div class="col text-center mt-1">
+                                                        Tags:
+                                                    </div>
+                                                    <div id="button_holder{{ forloop.counter }}">
+
+                                                    </div>
+                                                    <p id="all_tags{{ forloop.counter }}">{{ note.tags }}</p>
+                                                </div>
+                                                <div>
+                                                    <a type="button" class="btn btn-danger "
+                                                       href="{% url 'delete_note' note_id=note.pk %}">
+                                                        Delete
+                                                    </a>
+                                                    <a type="button" class="btn btn-success "
+                                                       href="{% url 'view_note' note_id=note.pk %}">
+                                                        View
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- Page level plugins -->
+            <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+            <script>
+                var elements = document.getElementsByClassName("dragcols");
+                for (var i = 0; i < elements.length; i++) {
+                    new Sortable(elements[i], {
+                        animation: 150,
+                        ghostClass: elements[i].color,
+                    });
+                }
+                for(var ctr = 1 ; ctr <= {{ curr_notes|length }} ; ctr++){
+                    var tags = document.getElementById("all_tags"+ctr);
+                    var tags_arr = tags.innerHTML.split(",");
+                    for(var i = 0 ; i < tags_arr.length ; i++){
+                        var btn = document.createElement("button");
+                        btn.innerHTML = tags_arr[i];
+                        btn.className = "badge bg-warning mx-1";
+                        document.getElementById("button_holder"+ctr).appendChild(btn);
+                    }
+                    tags.remove();
+                }
+            </script>
+        {% else %}
+        <h4 style="text-align: center; color: #1e347b; font-family: 'Comic Sans MS';font-size: xx-large"><b>Oops nothing found!</b></h4>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+
+    {% endif %}
+{% endblock %}
