@@ -54,6 +54,9 @@ def dashboard(request):
     if not request.user.is_superuser:
         curr_notes = Note.objects.all().filter(user=request.user)
         curr_notes = curr_notes.order_by('-date_created')
+        paginator = Paginator(curr_notes, 5)
+        page_number = request.GET.get('page')
+        curr_notes = paginator.get_page(page_number)
         return render(request, 'cube/dashboard.html', {'curr_notes': curr_notes})
     return redirect('/admin')
 
@@ -147,11 +150,14 @@ class UserCrudView(APIView):
             if not request.GET.get('random_user'):
                 if not request.GET.get('all_users'):
                     users = cubeUser.objects.all()
-                    page_number = request.GET.get('page_number',1)
-                    page_size = request.GET.get('page_size',5)
+                    page_number = request.GET.get('page_number', 1)
+                    page_size = request.GET.get('page_size', 5)
                     paginator = Paginator(users, page_size)
-                    serializer = cubeUserSerializer(paginator.page(page_number), many=True)
-                    return JsonResponse(serializer.data, safe=False)
+                    try:
+                        serializer = cubeUserSerializer(paginator.page(page_number), many=True)
+                        return JsonResponse(serializer.data, safe=False)
+                    except:
+                        return JsonResponse({'error': 'Invalid Page Number'}, safe=False)
                 else:
                     return JsonResponse(cubeUserSerializer(cubeUser.objects.all(), many=True).data, safe=False)
             else:
