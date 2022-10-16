@@ -65,7 +65,7 @@ def user_login(request):
         print(username, password)
         curr_user = authenticate(request, username=username, password=password)
         if not curr_user:
-            return HttpResponse('Invalid Credentials')
+            return render(request, 'cube/login.html', {'error': 'Invalid Credentials'})
         elif curr_user.is_superuser:
             return redirect('/admin')
         else:
@@ -181,7 +181,6 @@ class UserCrudView(APIView):
                 'message': 'User deleted successfully'
             })
         return JsonResponse({'error': 'Invalid API Key'}, status=400)
-
     def patch(self, request):
         if APIkey.objects.filter(key=request.GET.get('apikey')).exists():
             pk = request.GET.get('pk')
