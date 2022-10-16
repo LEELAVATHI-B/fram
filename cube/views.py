@@ -10,6 +10,7 @@ from .serializers import cubeUserSerializer
 from django_summernote.widgets import SummernoteInplaceWidget
 from .forms import Noteform, ProfilePicUpdate
 from django.core.files import File
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import datetime
 
 
@@ -52,6 +53,7 @@ def profile(request):
 def dashboard(request):
     if not request.user.is_superuser:
         curr_notes = Note.objects.all().filter(user=request.user)
+        curr_notes = curr_notes.order_by('-date_created')
         return render(request, 'cube/dashboard.html', {'curr_notes': curr_notes})
     return redirect('/admin')
 
@@ -142,9 +144,19 @@ def view_task(request, note_id):
 class UserCrudView(APIView):
     def get(self, request):
         if APIkey.objects.filter(key=request.GET.get('apikey')).exists():
-            users = cubeUser.objects.all()
-            serializer = cubeUserSerializer(users, many=True)
-            return JsonResponse(serializer.data, safe=False)
+            if not request.GET.get('random_user'):
+                if not request.GET.get('all_users'):
+                    users = cubeUser.objects.all()
+                    page_number = request.GET.get('page_number',1)
+                    page_size = request.GET.get('page_size',5)
+                    paginator = Paginator(users, page_size)
+                    serializer = cubeUserSerializer(paginator.page(page_number), many=True)
+                    return JsonResponse(serializer.data, safe=False)
+                else:
+                    return JsonResponse(cubeUserSerializer(cubeUser.objects.all(), many=True).data, safe=False)
+            else:
+                random_user = cubeUser.objects.order_by('?').first()
+                return JsonResponse(cubeUserSerializer(random_user).data, safe=False)
         return JsonResponse({'error': 'Invalid API Key'}, status=400)
 
     def post(self, request):
@@ -181,6 +193,7 @@ class UserCrudView(APIView):
                 'message': 'User deleted successfully'
             })
         return JsonResponse({'error': 'Invalid API Key'}, status=400)
+
     def patch(self, request):
         if APIkey.objects.filter(key=request.GET.get('apikey')).exists():
             pk = request.GET.get('pk')
@@ -195,7 +208,6 @@ class UserCrudView(APIView):
 
 def search_result(request, search_query):
     notes = Note.objects.filter(user=request.user, title__icontains=search_query)
-    print(search_query)
     return render(request, 'cube/search_results.html', {'curr_notes': notes})
 
 

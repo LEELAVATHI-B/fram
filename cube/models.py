@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 import secrets
 
+
 # Create your models here.
 class cubeUser(models.Model):
     profile_pic = models.ImageField(upload_to='profile_pics', blank=True)
@@ -33,6 +34,7 @@ class APIkey(models.Model):
 
     def __str__(self):
         return self.name
+
     class Meta:
         verbose_name_plural = 'APIkeys'
         verbose_name = 'APIkey'
