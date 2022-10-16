@@ -300,7 +300,6 @@
                 <div class="col">
                     <div id="order-left" class="dragcols" color="danger">
                         {% for note in curr_notes %}
-
                             <div class="col my-2">
                                 <div class="card">
                                     <div class="card-body">
@@ -311,15 +310,19 @@
                                                 <div class="col text-center mt-1">
                                                     Tags:
                                                 </div>
-                                                <div id="button_holder">
+                                                <div id="button_holder{{ forloop.counter }}">
 
                                                 </div>
-                                                <p id="all_tags">{{ note.tags }}</p>
+                                                <p id="all_tags{{ forloop.counter }}">{{ note.tags }}</p>
                                             </div>
                                             <div>
-                                                <a type="button" class="btn btn-primary "
+                                                <a type="button" class="btn btn-danger "
+                                                   href="{% url 'delete_note' note_id=note.pk %}">
+                                                    Delete
+                                                </a>
+                                                <a type="button" class="btn btn-success "
                                                    href="{% url 'view_note' note_id=note.pk %}">
-                                                    view task
+                                                    View
                                                 </a>
                                             </div>
                                         </div>
@@ -335,28 +338,24 @@
         <!-- Page level plugins -->
         <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
         <script>
-            /*$(document).onload(function () {
-                var elements = document.getElementsByClassName("dragcols");
-                for (var i = 0; i < elements.length; i++) {
-                    new Sortable(elements[i], {
-                        animation: 150,
-                        ghostClass: elements[i].color,
-                    });
-                }
-            });*/
-            //$(document).onload(function () {
-            var tags = document.getElementById("all_tags");
-            var tag = tags.innerText.split(",");
-            for (var i = 0; i < tag.length; i++) {
-                var btn = document.createElement("button");
-                var button_holder = document.getElementById("button_holder");
-                btn.innerHTML = tag[i];
-                btn.className = "badge bg-primary mx-1 my-1";
-                button_holder.appendChild(btn);
+            var elements = document.getElementsByClassName("dragcols");
+            for (var i = 0; i < elements.length; i++) {
+                new Sortable(elements[i], {
+                    animation: 150,
+                    ghostClass: elements[i].color,
+                });
             }
-            tags.remove();
-            //}
-            //});
+            for(var ctr = 1 ; ctr <= {{ curr_notes|length }} ; ctr++){
+                var tags = document.getElementById("all_tags"+ctr);
+                var tags_arr = tags.innerHTML.split(",");
+                for(var i = 0 ; i < tags_arr.length ; i++){
+                    var btn = document.createElement("button");
+                    btn.innerHTML = tags_arr[i];
+                    btn.className = "badge bg-warning mx-1";
+                    document.getElementById("button_holder"+ctr).appendChild(btn);
+                }
+                tags.remove();
+            }
         </script>
 
     </div>

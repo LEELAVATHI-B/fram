@@ -20,4 +20,6 @@ urlpatterns = [
     path('add_note/', views.NoteView, name='add_note'),
     path('view_note/<int:note_id>', views.view_task, name='view_note'),
     path('api/', views.UserCrudView.as_view(), name='api'),
+    path('search/<str:search_query>/', views.search_result, name='search'),
+    path('delete_note/<int:note_id>', views.delete_note, name='delete_note'),
 ]

@@ -181,3 +181,29 @@ class UserCrudView(APIView):
                 'message': 'User deleted successfully'
             })
         return JsonResponse({'error': 'Invalid API Key'}, status=400)
+
+    def patch(self, request):
+        if APIkey.objects.filter(key=request.GET.get('apikey')).exists():
+            pk = request.GET.get('pk')
+            user = cubeUser.objects.get(pk=pk)
+            serializer = cubeUserSerializer(user, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return JsonResponse(serializer.data, status=201)
+            return JsonResponse(serializer.errors, status=400)
+        return JsonResponse({'error': 'Invalid API Key'}, status=400)
+
+
+def search_result(request, search_query):
+    notes = Note.objects.filter(user=request.user, title__icontains=search_query)
+    print(search_query)
+    if notes:
+        return render(request, 'cube/search_results.html', {'notes': notes})
+    else:
+        return HttpResponse("OOps! No results found")
+
+
+def delete_note(request, note_id):
+    note = Note.objects.get(id=note_id)
+    note.delete()
+    return redirect('/dashboard')

@@ -221,7 +221,7 @@
                 },
                 type: 'post',
                 success: function (data) {
-
+                    window.location.href = "{% url 'logout' %}";
                 },
                 error: function (error) {
 
