@@ -90,6 +90,8 @@ def user_signup(request):
         contact_number = request.POST.get('phone')
         address = request.POST.get('address')
         password = request.POST.get('password')
+        if User.objects.filter(username=user_name).exists():
+            return redirect('/login')
         currUser = cubeUser(user_name=user_name, first_name=first_name, last_name=last_name, email=email,
                             contact_number=contact_number, address=address)
         authUser = User.objects.create_user(user_name, email, password)
