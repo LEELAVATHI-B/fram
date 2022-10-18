@@ -1,19 +1,22 @@
 {% extends 'cube/base.html' %}
 {% block content %}
-    <div class="container">
+    <div class="container my-3">
         <div class="container text-center">
-                <h1>{{ note.title }}</h1>
+            <h1>{{ note.title }}</h1>
         </div>
-            <div class="container mx-3" style='all: revert !important;'>
-                {{ note.content|safe }}
-            </div>
+        <div class="container mx-3" style='all: revert !important;'>
+            {{ note.content|safe }}
+        </div>
 
-        <a class="btn btn-danger" href="{% url 'delete_note' note_id=note.pk %}">
-            <i class="fa fa-trash"></i>
-            Delete
-        </a>
-        </div>
+            <a class="btn btn-danger" href="{% url 'delete_note' note_id=note.pk %}">
+                <i class="fa fa-trash"></i>
+                Delete
+            </a>
+            <a class="btn btn-info" href="{% url 'edit_note' note_id=note.pk %}">
+                <i class="fa fa-edit"></i>
+                Edit
+            </a>
     </div>
-    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
-
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"
+            integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
 {% endblock %}

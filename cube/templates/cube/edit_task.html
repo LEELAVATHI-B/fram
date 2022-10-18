@@ -1,0 +1,59 @@
+{% extends 'cube/base.html' %}
+{% block content %}
+    <style>
+        .input-tags {
+            width: 100%;
+            padding: 15px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .label-info {
+            background-color: #5bc0de;
+            padding: 3px;
+        }
+    </style>
+    <h1 class="text-center"> New Note</h1>
+    <div class="container text-center align-content-center">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                {{ form.title }}
+            </div>
+            <div class="container align-content-center">
+                {{ form.content }}
+            </div>
+            <br>
+            <div class="form-group">
+                <button onkeypress="return event.keyCode!=13" class="btn btn-success px-4" type="submit">Post</button>
+            </div>
+        </form>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
+            integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.min.js"
+            integrity="sha512-9UR1ynHntZdqHnwXKTaOm1s6V9fExqejKvg5XMawEMToW4sSw+3jtLrYfZPijvnwnnE8Uol1O9BcAskoxgec+g=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css"
+          integrity="sha512-xmGTNt20S0t62wHLmQec2DauG9T+owP9e6VU8GigI0anN7OXLip9i7IwEhelasml2osdxX71XcYm6BQunTQeQg=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <script>
+        $(document).ready(function () {
+            var title = document.getElementById("id_title");
+            title.classList.add("form-control");
+            title.placeholder = "Title";
+            title.type = "text";
+            var tags = '{{ tags }}'.split(",");
+            var input_tags = document.getElementById("tags");
+            for (var i = 0; i < tags.length; i++) {
+                var tag_input = document.getElementById("tags");
+                console.log(tag_input);
+                console.log(tags[i]);
+                tag_input.value = tags[i];
+            }
+
+        });
+    </script>
+{% endblock %}

@@ -82,7 +82,7 @@ def user_login(request):
 def user_signup(request):
     if request.user.is_authenticated:
         return redirect('/dashboard')
-    if request.method == 'POST':
+    elif request.method == 'POST':
         user_name = request.POST.get('username')
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
@@ -223,3 +223,23 @@ def delete_note(request, note_id):
     note = Note.objects.get(id=note_id)
     note.delete()
     return redirect('/dashboard')
+
+
+def editNote(request, note_id):
+    if request.method == "POST":
+        form = Noteform(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data['title']
+            content = form.cleaned_data['content']
+            note = Note.objects.get(pk=note_id)
+            note.title = title
+            note.content = content
+            note.save()
+            return redirect('/dashboard')
+    note = Note.objects.get(pk=note_id)
+    intial_data = {
+        'title': note.title,
+        'content': note.content,
+    }
+    editForm = Noteform(request.POST or None, initial=intial_data)
+    return render(request, 'cube/edit_task.html', {'form': editForm})

@@ -22,4 +22,5 @@ urlpatterns = [
     path('api/', views.UserCrudView.as_view(), name='api'),
     path('search/<str:search_query>/', views.search_result, name='search'),
     path('delete_note/<int:note_id>', views.delete_note, name='delete_note'),
+    path('edit_note/<int:note_id>',views.editNote,name='edit_note')
 ]
