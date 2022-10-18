@@ -4,9 +4,9 @@
             <div  class="row no-gutters ">
                 <div class="col-md-4 col-lg-4">
                      {% if not random_user.profile_pic %}
-                        <img style="width: 20rem;height: 20rem; border-radius: 20px;" src="https://i.imgur.com/aCwpF7V.jpg">
+                        <img style="width: 20rem;height: 20rem; border-radius: 20px;" src="https://i.imgur.com/aCwpF7V.jpg " alt="User Profile">
                     {% else %}
-                        <img style="width: 20rem;height: 20rem; border-radius: 20px;" src="{{ random_user.profile_pic.url }}">
+                        <img style="width: 20rem;height: 20rem; border-radius: 20px;" src="{{ random_user.profile_pic.url }}" alt="{{ random_user.user_name }}">
                     {% endif %}
                 </div>
                 <div class="col-md-8 col-lg-8">
@@ -16,7 +16,7 @@
 
                         </div>
                         <div class="col-sm text-center">
-                    <h4 style="padding-top: 10px"><b>BIO</b></h4>
+                    <h4 style="padding-top: 10px"><strong>BIO</strong></h4>
                     <div class="col">
                         <!-- Earnings (Monthly) Card Example -->
                         <div id="order-right" class="dragcols" color="danger">
