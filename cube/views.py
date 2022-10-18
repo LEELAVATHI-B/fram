@@ -79,6 +79,7 @@ def user_login(request):
     return render(request, 'cube/login.html')
 
 
+
 def user_signup(request):
     if request.user.is_authenticated:
         return redirect('/dashboard')
