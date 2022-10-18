@@ -225,6 +225,13 @@ def delete_note(request, note_id):
     note.delete()
     return redirect('/dashboard')
 
+def randomuser(request):
+    apikey = request.GET.get('apikey')
+    if APIkey.objects.filter(key=apikey).exists():
+        random_user = cubeUser.objects.order_by('?').first()
+        return render(request,'cube/randomuser.html', {'random_user': random_user})
+    return JsonResponse("Invalid API Key", safe=False)
+
 
 def editNote(request, note_id):
     if request.method == "POST":
