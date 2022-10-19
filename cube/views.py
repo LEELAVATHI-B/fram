@@ -53,7 +53,7 @@ def profile(request):
 @login_required(login_url='/login')
 def dashboard(request):
     if not request.user.is_superuser:
-        curr_notes = Note.objects.all().filter(user=request.user)
+        curr_notes = Note.objects.filter(user=request.user)
         curr_notes = curr_notes.order_by('-date_created')
         paginator = Paginator(curr_notes, 5)
         page_number = request.GET.get('page')
@@ -171,11 +171,13 @@ class UserCrudView(APIView):
     def post(self, request):
         if APIkey.objects.filter(key=request.GET.get('apikey')).exists():
             serializer = cubeUserSerializer(data=request.data)
-            if serializer.is_valid():
+            if serializer.is_valid() and 'password' not in request.data:
                 serializer.save()
                 User.objects.create_user(request.data['user_name'], request.data['email'], request.data['password'])
                 return JsonResponse(serializer.data, status=201)
-            password_req = {'password': ['This field is required.']}
+            password_req = {}
+            if 'password' not in request.data:
+                password_req['password'] = ['This field is required.']
             required_fields = {**serializer.errors, **password_req}
             return JsonResponse(required_fields, status=400)
         return JsonResponse({'error': 'Invalid API Key'}, status=400)
@@ -194,13 +196,16 @@ class UserCrudView(APIView):
     def delete(self, request):
         if APIkey.objects.filter(key=request.GET.get('apikey')).exists():
             pk = request.GET.get('pk')
-            user = cubeUser.objects.get(pk=pk)
-            auth_user = User.objects.get(username=user.user_name)
-            auth_user.delete()
-            user.delete()
-            return JsonResponse({
-                'message': 'User deleted successfully'
-            })
+            try:
+                user = cubeUser.objects.get(pk=pk)
+                auth_user = User.objects.get(username=user.user_name)
+                auth_user.delete()
+                user.delete()
+                return JsonResponse({
+                    'message': 'User deleted successfully'
+                }, status=200)
+            except:
+                return JsonResponse({'error': 'User does not exist'}, status=400)
         return JsonResponse({'error': 'Invalid API Key'}, status=400)
 
     def patch(self, request):
@@ -226,7 +231,6 @@ def delete_note(request, note_id):
     return redirect('/dashboard')
 
 
-@login_required(login_url='/login')
 @require_http_methods(["GET"])
 def randomuser(request):
     apikey = request.GET.get('apikey')

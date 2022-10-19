@@ -221,12 +221,13 @@
                 },
                 type: 'post',
                 success: function (data) {
-                    window.location.href = "{% url 'logout' %}";
+                    window.location.href = '{% url 'login' %}';
                 },
                 error: function (error) {
 
                 }
             });
+            window.location.href = '{% url 'login' %}';
         }
     </script>
 {% endblock %}
