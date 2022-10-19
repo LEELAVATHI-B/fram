@@ -12,6 +12,7 @@ from .forms import Noteform, ProfilePicUpdate
 from django.core.files import File
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import datetime
+from django.views.decorators.http import require_http_methods
 
 
 # Create your views here.
@@ -77,7 +78,6 @@ def user_login(request):
             login(request, curr_user)
             return redirect('/dashboard')
     return render(request, 'cube/login.html')
-
 
 
 def user_signup(request):
@@ -225,14 +225,19 @@ def delete_note(request, note_id):
     note.delete()
     return redirect('/dashboard')
 
+
+@login_required(login_url='/login')
+@require_http_methods(["GET"])
 def randomuser(request):
     apikey = request.GET.get('apikey')
     if APIkey.objects.filter(key=apikey).exists():
         random_user = cubeUser.objects.order_by('?').first()
-        return render(request,'cube/randomuser.html', {'random_user': random_user})
+        return render(request, 'cube/randomuser.html', {'random_user': random_user})
     return JsonResponse("Invalid API Key", safe=False)
 
 
+@require_http_methods(["GET", "POST"])
+@login_required(login_url='/login')
 def editNote(request, note_id):
     if request.method == "POST":
         form = Noteform(request.POST)
