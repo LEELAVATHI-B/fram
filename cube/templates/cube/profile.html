@@ -108,11 +108,11 @@
                                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Anonymous_emblem.svg/640px-Anonymous_emblem.svg.png"
                                  alt="">
                         {% endif %}
-                        <!-- Profile picture help block-->
+
 
                         <div class="small font-italic text-muted mb-4" style="font-size: larger">
                             <b>{{ request.user.username }}</b></div>
-                        <!-- Profile picture upload button-->
+
                         <form method="post" enctype="multipart/form-data" id="profile_pic">
                             {% csrf_token %}
 
@@ -138,7 +138,7 @@
                 });
             </script>
             <div class="col-xl-8">
-                <!-- Account details card-->
+
                 <div class="card mb-4">
                     <div class="card-header">Account Details</div>
                     <div class="card-body">
@@ -146,13 +146,13 @@
                             {% csrf_token %}
                             <!-- Form Row-->
                             <div class="row gx-3 mb-3">
-                                <!-- Form Group (first name)-->
+
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputFirstName">First name</label>
                                     <input name="first_name" class="form-control" id="inputFirstName" type="text"
                                            placeholder="Enter your first name" value="{{ curr_userobj.first_name }}">
                                 </div>
-                                <!-- Form Group (last name)-->
+
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputLastName">Last name</label>
                                     <input name="last_name" class="form-control" id="inputLastName" type="text"
@@ -164,23 +164,23 @@
                                 <input name="email" class="form-control" id="inputEmailAddress" type="email"
                                        placeholder="Enter your email address" value="{{ curr_userobj.email }}">
                             </div>
-                            <!-- Form Row-->
+
                             <div class="row gx-3 mb-3">
-                                <!-- Form Group (phone number)-->
+
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputPhone">Phone number</label>
                                     <input name="phone" class="form-control" id="inputPhone" type="tel"
                                            placeholder="Enter your phone number"
                                            value="{{ curr_userobj.contact_number }}">
                                 </div>
-                                <!-- Form Group (birthday)-->
+
                             </div>
                             <div class="mb-3">
                                 <label class="small mb-1" for="inputUsername">Address</label>
                                 <textarea name="address" class="form-control" id="inputUsername" type="text-area"
                                           placeholder="Enter your username">{{ curr_userobj.address }}</textarea>
                             </div>
-                            <!-- Save changes button-->
+
                             <button class="btn btn-primary" type="submit">Save changes</button>
                             <a class="btn btn-danger" type="button" data-toggle="modal" data-target="#dlt">Delete
                                 Account</a>

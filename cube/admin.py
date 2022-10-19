@@ -3,7 +3,7 @@ from django.contrib.auth.admin import Group
 from django_summernote.admin import SummernoteModelAdmin
 from .models import Note, cubeUser, APIkey
 
-# Register your models here.
+
 
 
 class PostAdmin(SummernoteModelAdmin):
