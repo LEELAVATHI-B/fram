@@ -302,45 +302,48 @@
             <div class="col">
                 <div class="col">
                     <div id="order-left" class="dragcols" color="danger">
-                        {% for note in curr_notes %}
-                            <div class="col my-2">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title text-center"><b>{{ note.title }}</b></h5>
-                                        <hr>
-                                        <div style="width: 100%;display: flex;justify-content: space-between;">
-                                            <div class="row">
-                                                <div class="col text-center mt-1">
-                                                    Tags:
-                                                </div>
-                                                <div id="button_holder{{ forloop.counter }}">
+                    {% if curr_notes %}
+                            {% for note in curr_notes %}
+                                <div class="col my-2">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title text-center"><b>{{ note.title }}</b></h5>
+                                            <hr>
+                                            <div style="width: 100%;display: flex;justify-content: space-between;">
+                                                <div class="row">
+                                                    <div class="col text-center mt-1">
+                                                        Tags:
+                                                    </div>
+                                                    <div id="button_holder{{ forloop.counter }}">
 
+                                                    </div>
+                                                    <p id="all_tags{{ forloop.counter }}">{{ note.tags }}</p>
                                                 </div>
-                                                <p id="all_tags{{ forloop.counter }}">{{ note.tags }}</p>
-                                            </div>
-                                            <div>
-                                                <a type="button" class="btn btn-danger "
-                                                   href="{% url 'delete_note' note_id=note.pk %}">
-                                                    <em class="fa fa-trash"></em>
-                                                    Delete
-                                                </a>
-                                                <a type="button" class="btn btn-info "
-                                                   href="{% url 'edit_note' note_id=note.pk %}">
-                                                    <em class="fa fa-edit"></em>
-                                                    Edit
-                                                </a>
-                                                <a type="button" class="btn btn-success "
-                                                   href="{% url 'view_note' note_id=note.pk %}">
-                                                    <em class="fa fa-arrow-right"></em>
-                                                    View
-                                                </a>
+                                                <div>
+                                                    <a type="button" class="btn btn-danger "
+                                                       href="{% url 'delete_note' note_id=note.pk %}">
+                                                        <em class="fa fa-trash"></em>
+                                                        Delete
+                                                    </a>
+                                                    <a type="button" class="btn btn-info "
+                                                       href="{% url 'edit_note' note_id=note.pk %}">
+                                                        <em class="fa fa-edit"></em>
+                                                        Edit
+                                                    </a>
+                                                    <a type="button" class="btn btn-success "
+                                                       href="{% url 'view_note' note_id=note.pk %}">
+                                                        <em class="fa fa-arrow-right"></em>
+                                                        View
+                                                    </a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        {% endfor %}
-
+                            {% endfor %}
+                        {% else %}
+                            <h2>Oops no note found try again after some time</h2>
+                        {% endif %}
                     </div>
                 </div>
             </div>
