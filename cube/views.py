@@ -171,7 +171,7 @@ class UserCrudView(APIView):
     def post(self, request):
         if APIkey.objects.filter(key=request.GET.get('apikey')).exists():
             serializer = cubeUserSerializer(data=request.data)
-            if serializer.is_valid() and 'password' not in request.data:
+            if serializer.is_valid() and 'password' in request.data:
                 serializer.save()
                 User.objects.create_user(request.data['user_name'], request.data['email'], request.data['password'])
                 return JsonResponse(serializer.data, status=201)
