@@ -23,7 +23,7 @@ Tesseract is a web-app referring the problem statement given by iamneo
 ---
 
 ## Installation Instructions
-This is a web application; to set it up, we require a python environment with Django and other project dependencies installed.
+This is a web application. to set it up, we require a python environment with Django and other project dependencies installed.
  Though one can work with the project without a virtual environment, it is recommended to use one to avoid conflicts with other projects
 
 ## General setup
