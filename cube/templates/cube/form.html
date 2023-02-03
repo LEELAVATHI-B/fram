@@ -1,0 +1,62 @@
+{% extends 'cube/base.html' %}
+{% block content %}
+    <div class="container">
+        {% if not best_crop %}
+            <form method="post">
+            {% csrf_token %}
+            <div class="form-group row">
+                <label for="input3" class="col-sm-2 col-form-label">N</label>
+                <div class="col-sm-10">
+                    <input name="N" type="" class="form-control" id="input3" placeholder="Nitrogen">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="input3" class="col-sm-2 col-form-label">P</label>
+                <div class="col-sm-10">
+                    <input name="P" type="" class="form-control" id="input3" placeholder="Phosphorus">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="input3" class="col-sm-2 col-form-label">K</label>
+                <div class="col-sm-10">
+                    <input name="K" type="" class="form-control" id="input3" placeholder="Potassium">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="input3" class="col-sm-2 col-form-label">Temperature</label>
+                <div class="col-sm-10">
+                    <input name="temp" type="" class="form-control" id="input3" placeholder="Temperature">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="input3" class="col-sm-2 col-form-label">Humidity</label>
+                <div class="col-sm-10">
+                    <input name="humidity" type="" class="form-control" id="input3" placeholder="Humidity">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="input3" class="col-sm-2 col-form-label">PH</label>
+                <div class="col-sm-10">
+                    <input name="soilph" type="" class="form-control" id="input3" placeholder="Soil Ph">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="input3" class="col-sm-2 col-form-label">Rainfall</label>
+                <div class="col-sm-10">
+                    <input name="rainfall" type="" class="form-control" id="input3" placeholder="Rainfall">
+                </div>
+            </div>
+            <div class="form-group row text-center">
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary">Get Best Crop</button>
+                </div>
+            </div>
+        </form>
+        {% else %}
+            <div class="container text-center my-3">
+                <h1>The best crop to grow is {{ best_crop }}</h1>
+            <a class="btn btn-danger" href="/dashboard">Try Another</a>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -13,9 +13,35 @@ from django.core.files import File
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import datetime
 from django.views.decorators.http import require_http_methods
-
+import joblib
+import numpy as np
+from django.contrib.staticfiles.storage import staticfiles_storage
 
 # Create your views here.
+
+model = joblib.load('models/model.joblib')
+targets = {0: 'apple',
+           1: 'banana',
+           2: 'blackgram',
+           3: 'chickpea',
+           4: 'coconut',
+           5: 'coffee',
+           6: 'cotton',
+           7: 'grapes',
+           8: 'jute',
+           9: 'kidneybeans',
+           10: 'lentil',
+           11: 'maize',
+           12: 'mango',
+           13: 'mothbeans',
+           14: 'mungbean',
+           15: 'muskmelon',
+           16: 'orange',
+           17: 'papaya',
+           18: 'pigeonpeas',
+           19: 'pomegranate',
+           20: 'rice',
+           21: 'watermelon'}
 
 
 def index(request):
@@ -53,12 +79,18 @@ def profile(request):
 @login_required(login_url='/login')
 def dashboard(request):
     if not request.user.is_superuser:
-        curr_notes = Note.objects.filter(user=request.user)
-        curr_notes = curr_notes.order_by('-date_created')
-        paginator = Paginator(curr_notes, 5)
-        page_number = request.GET.get('page')
-        curr_notes = paginator.get_page(page_number)
-        return render(request, 'cube/dashboard.html', {'curr_notes': curr_notes})
+        if request.method == "POST":
+            N = float(request.POST.get('N'))
+            P = float(request.POST.get('P'))
+            K = float(request.POST.get('K'))
+            temperature = float(request.POST.get('temp'))
+            humidity = float(request.POST.get('humidity'))
+            soil_ph = float(request.POST.get('soilph'))
+            rainfall = float(request.POST.get('rainfall'))
+            best_crop = model.predict(np.array([[N, P, K, temperature, humidity, soil_ph, rainfall]]))
+            return render(request, 'cube/form.html', {'best_crop': targets[best_crop[0]]})
+
+        return render(request, 'cube/form.html')
     return redirect('/admin')
 
 
